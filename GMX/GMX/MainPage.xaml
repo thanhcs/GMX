@@ -2,10 +2,46 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:GMX"
+             xmlns:dataControls="clr-namespace:Telerik.XamarinForms.DataControls;assembly=Telerik.XamarinForms.DataControls"
+             xmlns:listView="clr-namespace:Telerik.XamarinForms.DataControls.ListView;assembly=Telerik.XamarinForms.DataControls"
+             Title="Main Page"
              x:Class="GMX.MainPage">
 
-	<Label Text="Welcome to Xamarin Forms!" 
-           VerticalOptions="Center" 
-           HorizontalOptions="Center" />
+    <ContentPage.BindingContext>
+        <local:ViewModel />
+    </ContentPage.BindingContext>
+    <dataControls:RadListView ItemsSource="{Binding Source}" BackgroundColor="White" IsItemSwipeEnabled="True" SwipeThreshold="70" SwipeOffset="70, 0, 70, 0" ItemSwipeCompleted="OnItemSwipeCompleted" SelectionMode="None">
+        <dataControls:RadListView.ItemTemplate>
+            <DataTemplate>
+                <listView:ListViewTemplateCell>
+                    <listView:ListViewTemplateCell.View>
+                        <Grid BackgroundColor="White">
+                            <StackLayout Orientation="Horizontal" Margin="10, 10, 10, 0">
+                                <Image Source="unread.png" WidthRequest="10" HeightRequest="10" IsVisible="{Binding IsUnread}" VerticalOptions="Center" />
+                                <Label Text="{Binding Sender}" FontSize="16" FontAttributes="Bold" Grid.Column="1" TextColor="Black" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal" Margin="10, 0, 10, 10" Grid.Row="1">
+                                <Label Text="Subject:" FontSize="14" TextColor="Gray" />
+                                <Label Text="{Binding Subject}" FontSize="14" TextColor="Gray" />
+                            </StackLayout>
+                        </Grid>
+                    </listView:ListViewTemplateCell.View>
+                </listView:ListViewTemplateCell>
+            </DataTemplate>
+        </dataControls:RadListView.ItemTemplate>
+        <dataControls:RadListView.ItemSwipeContentTemplate>
+            <DataTemplate>
+                <Grid Padding="0" Margin="0" RowSpacing="0" ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="70" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="70" />
+                    </Grid.ColumnDefinitions>
+                    <Label TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" BackgroundColor="#2474d2" WidthRequest="70" Text="Mark as read" />
+                    <Label TextColor="White" VerticalTextAlignment="Center" HorizontalTextAlignment="Center" BackgroundColor="Red" WidthRequest="70" Text="delete" Grid.Column="2" />
+                </Grid>
+            </DataTemplate>
+        </dataControls:RadListView.ItemSwipeContentTemplate>
+    </dataControls:RadListView>
 
 </ContentPage>

@@ -13,7 +13,7 @@ namespace GMX
         {
             InitializeComponent();
 
-            MainPage = new GMX.MainPage();
+            MainPage = new GMX.HomePage();
         }
 
         protected override void OnStart()
