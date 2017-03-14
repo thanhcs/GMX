@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.SignalR.Client;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -72,7 +73,23 @@ namespace GMX
             new Mail{ Sender = "Jared Linton",  Subject = "Gillian Flynn"},
             new Mail{ Sender = "Felicia Keegan",  Subject = "Re: Summer Vacation"},
             new Mail{ Sender = "Felicia Keegan",  Subject = "Pictures"},
-        };
+            };
+
+            Task.Run(() =>SignalRConnection());
+        }
+
+        private async Task SignalRConnection()
+        {
+            var hubConnection = new HubConnection("http://192.168.29.143:61247");
+            var hubProxy = hubConnection.CreateHubProxy("ChatHub");
+            hubProxy.On<Mail>("broadcastMessage", mail => Device.BeginInvokeOnMainThread(() => this.Source.Add(new Mail()
+            {
+                Sender = mail.Sender,
+                Subject = mail.Subject,
+                IsUnread = true
+            }
+            )));
+            await hubConnection.Start();
         }
 
         public ObservableCollection<Mail> Source { get; set; }
